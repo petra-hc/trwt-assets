@@ -2,23 +2,20 @@ window.addEventListener('load', function () {
   var section  = document.querySelector('.trwt-praise');
   if (!section) return;
   var viewport = section.querySelector('.trwt-viewport');
-  var track    = section.querySelector('.w-dyn-items');
+  var track    = section.querySelector('.trwt-track .w-dyn-items') || section.querySelector('.w-dyn-items');
   var dotsWrap = section.querySelector('.trwt-dots');
   var prevBtn  = section.querySelector('[data-dir="prev"]');
   var nextBtn  = section.querySelector('[data-dir="next"]');
   if (!track || !viewport) return;
-
   var GAP = 28;
   var cards = Array.prototype.slice.call(track.children);
   var index = 0, cardW = 0, step = 0, maxIndex = 0, dots = [];
-
   function settings() {
     var w = window.innerWidth;
     if (w >= 1000) return { perView:2, peek:0.34 };
     if (w >= 700)  return { perView:1, peek:0.55 };
     return               { perView:1, peek:0.12 };
   }
-
   function layout() {
     var s = settings();
     var w = viewport.clientWidth;
@@ -30,7 +27,6 @@ window.addEventListener('load', function () {
     buildDots();
     update(false);
   }
-
   function buildDots() {
     if (!dotsWrap) return;
     dotsWrap.innerHTML = ''; dots = [];
@@ -44,12 +40,10 @@ window.addEventListener('load', function () {
       })(i);
     }
   }
-
   function go(i) {
     index = Math.max(0, Math.min(maxIndex, i));
     update(true);
   }
-
   function update(animate) {
     if (animate === false) {
       track.style.transition = 'none';
@@ -64,15 +58,12 @@ window.addEventListener('load', function () {
     if (nextBtn) nextBtn.toggleAttribute('disabled', index >= maxIndex);
     dots.forEach(function(d,i){ d.classList.toggle('is-active', i === index); });
   }
-
   if (prevBtn) prevBtn.addEventListener('click', function(){ go(index - 1); });
   if (nextBtn) nextBtn.addEventListener('click', function(){ go(index + 1); });
-
   section.addEventListener('keydown', function(e){
     if (e.key === 'ArrowLeft')  go(index - 1);
     if (e.key === 'ArrowRight') go(index + 1);
   });
-
   var startX = 0, startT = 0, dragging = false;
   viewport.addEventListener('pointerdown', function(e){
     dragging = true; startX = e.clientX; startT = index * step;
@@ -88,9 +79,7 @@ window.addEventListener('load', function () {
     if (Math.abs(dx) > cardW * 0.18) go(index + (dx < 0 ? 1 : -1));
     else update(true);
   });
-
   var rt;
   window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(layout, 120); });
-
   layout();
 });
