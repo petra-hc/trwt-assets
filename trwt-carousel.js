@@ -6,7 +6,7 @@
     var section  = document.querySelector('.trwt-praise');
     if (!section) return;
     var viewport = section.querySelector('.trwt-viewport');
-    var track    = section.querySelector('.trwt-track.w-dyn-items');
+    var track = section.querySelector(".trwt-track.w-dyn-items");
     var dotsWrap = section.querySelector('.trwt-dots');
     var prevBtn  = section.querySelector('[data-dir="prev"]');
     var nextBtn  = section.querySelector('[data-dir="next"]');
