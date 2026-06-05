@@ -1,15 +1,14 @@
-<script>
 window.addEventListener('load', function () {
   var section  = document.querySelector('.trwt-praise');
   if (!section) return;
   var viewport = section.querySelector('.trwt-viewport');
-  var trackWrapper = section.querySelector('.trwt-track .w-dyn-items') || section.querySelector('.w-dyn-items');
-  var track    = (trackWrapper && trackWrapper.children[0]) || trackWrapper;
+  var track    = section.querySelector('.trwt-track.w-dyn-items') || section.querySelector('.trwt-track') || section.querySelector('.w-dyn-items');
   var dotsWrap = section.querySelector('.trwt-dots');
   var prevBtn  = section.querySelector('[data-dir="prev"]');
   var nextBtn  = section.querySelector('[data-dir="next"]');
   if (!track || !viewport) return;
   var GAP = 28;
+  /* cards = the 8 w-dyn-item wrappers, step width driven by the inner .trwt-card */
   var cards = Array.prototype.slice.call(track.children);
   if (cards.length === 0) return;
   var index = 0, cardW = 0, step = 0, maxIndex = 0, dots = [];
@@ -25,7 +24,12 @@ window.addEventListener('load', function () {
     if (!w) return;
     cardW = (w - GAP * s.perView) / (s.perView + s.peek);
     step  = cardW + GAP;
-    cards.forEach(function(c){ c.style.width = cardW + 'px'; });
+    /* size both the w-dyn-item wrapper AND the inner trwt-card */
+    cards.forEach(function(c){
+      c.style.width = cardW + 'px';
+      var inner = c.querySelector('.trwt-card');
+      if (inner) inner.style.width = '100%';
+    });
     maxIndex = Math.max(0, cards.length - s.perView);
     if (index > maxIndex) index = maxIndex;
     buildDots();
@@ -87,4 +91,3 @@ window.addEventListener('load', function () {
   window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(layout, 120); });
   layout();
 });
-</script>
