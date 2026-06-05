@@ -1,14 +1,17 @@
+<script>
 window.addEventListener('load', function () {
   var section  = document.querySelector('.trwt-praise');
   if (!section) return;
   var viewport = section.querySelector('.trwt-viewport');
-  var track    = section.querySelector('.trwt-track .w-dyn-items') || section.querySelector('.w-dyn-items');
+  var trackWrapper = section.querySelector('.trwt-track .w-dyn-items') || section.querySelector('.w-dyn-items');
+  var track    = (trackWrapper && trackWrapper.children[0]) || trackWrapper;
   var dotsWrap = section.querySelector('.trwt-dots');
   var prevBtn  = section.querySelector('[data-dir="prev"]');
   var nextBtn  = section.querySelector('[data-dir="next"]');
   if (!track || !viewport) return;
   var GAP = 28;
   var cards = Array.prototype.slice.call(track.children);
+  if (cards.length === 0) return;
   var index = 0, cardW = 0, step = 0, maxIndex = 0, dots = [];
   function settings() {
     var w = window.innerWidth;
@@ -19,6 +22,7 @@ window.addEventListener('load', function () {
   function layout() {
     var s = settings();
     var w = viewport.clientWidth;
+    if (!w) return;
     cardW = (w - GAP * s.perView) / (s.perView + s.peek);
     step  = cardW + GAP;
     cards.forEach(function(c){ c.style.width = cardW + 'px'; });
@@ -83,3 +87,4 @@ window.addEventListener('load', function () {
   window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(layout, 120); });
   layout();
 });
+</script>
